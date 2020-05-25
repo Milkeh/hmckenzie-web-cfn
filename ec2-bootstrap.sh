@@ -1,13 +1,15 @@
 #!/bin/bash -xe
 exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
+source /etc/os-release
 
-# Install AWS CLI and unzip (ubuntu)
-sudo apt install unzip
-curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-unzip awscliv2.zip
-sudo ./aws/install
-
-aws s3 cp s3://hmckenzie-private/private-keys/hmckenzie-server /home/ec2-user/.ssh/
+# Install unzip and AWS CLI on debian based images
+case "$ID_LIKE" in *"debian"*|*"ubuntu"*)
+   sudo apt install unzip
+   curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+   unzip awscliv2.zip
+   sudo ./aws/install
+   ;;
+esac
 
 # Do some chef pre-work
 /bin/mkdir -p /etc/chef
@@ -16,6 +18,7 @@ aws s3 cp s3://hmckenzie-private/private-keys/hmckenzie-server /home/ec2-user/.s
 
 # Copy down our validation key
 aws s3 cp s3://hmckenzie-private/private-keys/hmckenzie-validator.pem /etc/chef/
+aws s3 cp s3://hmckenzie-private/private-keys/hmckenzie-server /tmp/
 
 # Setup hosts file correctly
 cat >> "/etc/hosts" << EOF
@@ -38,7 +41,7 @@ cat > "/etc/chef/first-boot.json" << EOF
 }
 EOF
 
-NODE_NAME=-$(curl http://169.254.169.254/latest/meta-data/instance-id)
+NODE_NAME=$(curl http://169.254.169.254/latest/meta-data/instance-id)
 
 # Create client.rb
 /bin/echo 'log_location     STDOUT' >> /etc/chef/client.rb
