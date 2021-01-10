@@ -1,0 +1,38 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  CloudFormation template for hmckenzie.net compute infrastructure
+Parameters:
+  NetworkStackName:
+    Description: Name of the CloudFormation network stack
+    Type: String
+    Default: hmckenzie-network
+Resources:
+  ELB:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      IpAddressType: ipv4
+      Name: 'Web ALB'
+      SecurityGroups: 
+      - Fn::ImportValue:
+          SG-ELB_Web_Access
+      Subnets:
+      - Fn::ImportValue:
+          VPC-PublicSubnetA
+      - Fn::ImportValue:
+          VPC-PublicSubnetB
+      - Fn::ImportValue:
+          VPC-PublicSubnetC
+
+  SSHSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: 'SG Allowing SSH Connections'
+      VpcId: 
+        Fn::ImportValue:
+          !Sub ${NetworkStackName}-VPC
+      GroupName: SSHAccess
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: 22
+        ToPort: 22
+        CidrIp: 0.0.0.0/0

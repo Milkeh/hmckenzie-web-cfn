@@ -1,6 +1,10 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: >-
   CloudFormation template for hmckenzie.net network
+Parameters:
+  Env:
+    Type: String
+    Description: Our Environment
 Resources:
   # VPC Creation
   VPC:
@@ -101,9 +105,103 @@ Resources:
       Tags:
       - Key: Name
         Value: !Sub ${AWS::StackName}-Private-C
+  # Security Groups
+  SSHSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: 'Allow SSH from specified IPs'
+      VpcId:
+        Ref: VPC
+      GroupName: 'SSH Access'
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: 22
+        ToPort: 22
+        CidrIp: 151.225.176.151/32
+  ELBWebAccess:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: 'Allow public web access to ELB'
+      VpcId:
+        Ref: VPC
+      GroupName: 'ELB Web Access'
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: 80
+        ToPort: 80
+        CidrIp: 0.0.0.0/0
+      - IpProtocol: tcp
+        FromPort: 443
+        ToPort: 443
+        CidrIp: 0.0.0.0/0
+  EC2ELBAccess:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: 'Allow web access from the ELB'
+      VpcId:
+        Ref: VPC
+      GroupName: 'EC2 ELB Access'
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: 80
+        ToPort: 80
+        SourceSecurityGroupId: 
+          Ref: ELBWebAccess
+      - IpProtocol: tcp
+        FromPort: 443
+        ToPort: 443
+        SourceSecurityGroupId: 
+          Ref: ELBWebAccess
 Outputs:
-  StackVPC:
+  # VPC Outputs
+  VPC:
     Description: The VPC for the stack
     Value: !Ref VPC
     Export:
       Name: !Sub ${AWS::StackName}-VPC
+  PublicSubnetA:
+    Description: Public Subnet A
+    Value: !Ref PublicSubnetA
+    Export:
+      Name: VPC-PublicSubnetA
+  PublicSubnetB:
+    Description: Public Subnet B
+    Value: !Ref PublicSubnetB
+    Export:
+      Name: VPC-PublicSubnetB
+  PublicSubnetC:
+    Description: Public Subnet C
+    Value: !Ref PublicSubnetC
+    Export:
+      Name: VPC-PublicSubnetC
+  PrivateSubnetA:
+    Description: Private Subnet A
+    Value: !Ref PrivateSubnetA
+    Export:
+      Name: VPC-PrivateSubnetA
+  PrivateSubnetB:
+    Description: Private Subnet B
+    Value: !Ref PrivateSubnetB
+    Export:
+      Name: VPC-PrivateSubnetB
+  PrivateSubnetC:
+    Description: Private Subnet C
+    Value: !Ref PrivateSubnetC
+    Export:
+      Name: VPC-PrivateSubnetC
+  # Security Group Outputs
+  SSHSecurityGroup:
+    Description: 'SSH Security Group'
+    Value: !Ref SSHSecurityGroup
+    Export:
+      Name: SG-SSHAccess
+  ELBWebAccess:
+    Description: 'ELB Web Access Security Group'
+    Value: !Ref ELBWebAccess
+    Export:
+      Name: SG-ELBWebAccess
+  EC2ELBAccess:
+    Description: 'EC2 ELB Access Security Group'
+    Value: !Ref EC2ELBAccess
+    Export:
+      Name: SG-EC2ELBAccess
