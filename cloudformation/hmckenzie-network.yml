@@ -1,10 +1,6 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: >-
   CloudFormation template for hmckenzie.net network
-Parameters:
-  Env:
-    Type: String
-    Description: Our Environment
 Resources:
   # VPC Creation
   VPC:
