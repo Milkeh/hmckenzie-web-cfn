@@ -11,10 +11,11 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:
       IpAddressType: ipv4
-      Name: 'Web ALB'
+      Name: 'web-alb'
+      Type: application
       SecurityGroups: 
       - Fn::ImportValue:
-          SG-ELB_Web_Access
+          SG-ELBWebAccess
       Subnets:
       - Fn::ImportValue:
           VPC-PublicSubnetA
@@ -22,17 +23,9 @@ Resources:
           VPC-PublicSubnetB
       - Fn::ImportValue:
           VPC-PublicSubnetC
-
-  SSHSecurityGroup:
-    Type: AWS::EC2::SecurityGroup
+  ELBListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
     Properties:
-      GroupDescription: 'SG Allowing SSH Connections'
-      VpcId: 
-        Fn::ImportValue:
-          !Sub ${NetworkStackName}-VPC
-      GroupName: SSHAccess
-      SecurityGroupIngress:
-      - IpProtocol: tcp
-        FromPort: 22
-        ToPort: 22
-        CidrIp: 0.0.0.0/0
+      LoadBalancerArn: !Ref ELB
+      DefaultActions:
+        - Type: forward
