@@ -6,12 +6,15 @@ Parameters:
     Description: Name of the CloudFormation network stack
     Type: String
     Default: hmckenzie-network
+  SSLCertificate:
+    Description: Arn of the SSL Certificate used on the internet facing ALB
+    Type: String
+
 Resources:
-  ELB:
+  ApplicationLoadBalancer:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:
-      IpAddressType: ipv4
-      Name: 'web-alb'
+      Name: 'Web-ALB'
       Type: application
       SecurityGroups: 
       - Fn::ImportValue:
@@ -23,9 +26,37 @@ Resources:
           VPC-PublicSubnetB
       - Fn::ImportValue:
           VPC-PublicSubnetC
-  ELBListener:
+
+  HTTPListener:
     Type: AWS::ElasticLoadBalancingV2::Listener
     Properties:
-      LoadBalancerArn: !Ref ELB
+      LoadBalancerArn: !Ref ApplicationLoadBalancer
       DefaultActions:
-        - Type: forward
+        - Type: "forward"
+          TargetGroupArn: !Ref ALBTargetGroup
+      Port: 80
+      Protocol: HTTP
+
+  HTTPSListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      LoadBalancerArn: !Ref ApplicationLoadBalancer
+      DefaultActions:
+        - Type: "forward"
+          TargetGroupArn: !Ref ALBTargetGroup
+      Port: 443
+      Protocol: HTTPS
+      SslPolicy: "ELBSecurityPolicy-2016-08"
+      Certificates:
+        - CertificateArn: !Ref SSLCertificate
+
+  ALBTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckEnabled: true
+      Name: web-tg
+      Port: 80
+      Protocol: HTTP
+      VpcId: 
+        Fn::ImportValue:
+          !Sub ${NetworkStackName}-VPC
