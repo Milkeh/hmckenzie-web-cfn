@@ -1,6 +1,7 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: >-
   CloudFormation template for hmckenzie.net network
+
 Resources:
   # VPC Creation
   VPC:
@@ -10,12 +11,14 @@ Resources:
       Tags:
       - Key: Name
         Value: !Sub ${AWS::StackName}-VPC
+
   InternetGateway:
     Type: AWS::EC2::InternetGateway
     Properties:
       Tags:
       - Key: Name
         Value: !Sub ${AWS::StackName}-IGW
+
   AttachInternetGateway:
     Type: AWS::EC2::VPCGatewayAttachment
     Properties:
@@ -23,6 +26,7 @@ Resources:
         Ref: InternetGateway
       VpcId:
         Ref: VPC
+
   PublicRouteTable:
     Type: AWS::EC2::RouteTable
     Properties:
@@ -31,6 +35,7 @@ Resources:
       Tags:
       - Key: Name
         Value: !Sub ${AWS::StackName}-PublicRT
+
   PublicRouteToIGW:
     Type: AWS::EC2::Route
     Properties:
@@ -40,6 +45,7 @@ Resources:
       GatewayId: 
         Ref: InternetGateway
   # Subnets - Public
+
   PublicSubnetA:
     Type: "AWS::EC2::Subnet"
     Properties:
@@ -50,6 +56,7 @@ Resources:
       Tags:
       - Key: Name
         Value: !Sub ${AWS::StackName}-Public-A
+
   PublicSubnetB:
     Type: "AWS::EC2::Subnet"
     Properties:
@@ -60,6 +67,7 @@ Resources:
       Tags:
       - Key: Name
         Value: !Sub ${AWS::StackName}-Public-B
+
   PublicSubnetC:
     Type: "AWS::EC2::Subnet"
     Properties:
@@ -70,6 +78,7 @@ Resources:
       Tags:
       - Key: Name
         Value: !Sub ${AWS::StackName}-Public-C
+
   # Subnets - Private
   PrivateSubnetA:
     Type: "AWS::EC2::Subnet"
@@ -81,6 +90,7 @@ Resources:
       Tags:
       - Key: Name
         Value: !Sub ${AWS::StackName}-Private-A
+
   PrivateSubnetB:
     Type: "AWS::EC2::Subnet"
     Properties:
@@ -91,6 +101,7 @@ Resources:
       Tags:
       - Key: Name
         Value: !Sub ${AWS::StackName}-Private-B
+
   PrivateSubnetC:
     Type: "AWS::EC2::Subnet"
     Properties:
@@ -101,6 +112,7 @@ Resources:
       Tags:
       - Key: Name
         Value: !Sub ${AWS::StackName}-Private-C
+
   # Security Groups
   SSHSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -130,6 +142,7 @@ Resources:
         FromPort: 443
         ToPort: 443
         CidrIp: 0.0.0.0/0
+
   EC2ELBAccess:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -148,6 +161,7 @@ Resources:
         ToPort: 443
         SourceSecurityGroupId: 
           Ref: ELBWebAccess
+
 Outputs:
   # VPC Outputs
   VPC:
@@ -155,47 +169,56 @@ Outputs:
     Value: !Ref VPC
     Export:
       Name: !Sub ${AWS::StackName}-VPC
+
   PublicSubnetA:
     Description: Public Subnet A
     Value: !Ref PublicSubnetA
     Export:
       Name: VPC-PublicSubnetA
+
   PublicSubnetB:
     Description: Public Subnet B
     Value: !Ref PublicSubnetB
     Export:
       Name: VPC-PublicSubnetB
+
   PublicSubnetC:
     Description: Public Subnet C
     Value: !Ref PublicSubnetC
     Export:
       Name: VPC-PublicSubnetC
+
   PrivateSubnetA:
     Description: Private Subnet A
     Value: !Ref PrivateSubnetA
     Export:
       Name: VPC-PrivateSubnetA
+
   PrivateSubnetB:
     Description: Private Subnet B
     Value: !Ref PrivateSubnetB
     Export:
       Name: VPC-PrivateSubnetB
+
   PrivateSubnetC:
     Description: Private Subnet C
     Value: !Ref PrivateSubnetC
     Export:
       Name: VPC-PrivateSubnetC
+
   # Security Group Outputs
   SSHSecurityGroup:
     Description: 'SSH Security Group'
     Value: !Ref SSHSecurityGroup
     Export:
       Name: SG-SSHAccess
+
   ELBWebAccess:
     Description: 'ELB Web Access Security Group'
     Value: !Ref ELBWebAccess
     Export:
       Name: SG-ELBWebAccess
+
   EC2ELBAccess:
     Description: 'EC2 ELB Access Security Group'
     Value: !Ref EC2ELBAccess

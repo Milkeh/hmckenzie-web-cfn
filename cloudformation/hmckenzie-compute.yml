@@ -1,6 +1,7 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: >-
   CloudFormation template for hmckenzie.net compute infrastructure
+
 Parameters:
   NetworkStackName:
     Description: Name of the CloudFormation network stack
