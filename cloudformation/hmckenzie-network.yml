@@ -44,8 +44,8 @@ Resources:
         Ref: PublicRouteTable
       GatewayId: 
         Ref: InternetGateway
-  # Subnets - Public
 
+  # Subnets - Public
   PublicSubnetA:
     Type: "AWS::EC2::Subnet"
     Properties:
