@@ -7,9 +7,6 @@ Parameters:
     Description: Name of the CloudFormation network stack
     Type: String
     Default: hmckenzie-network
-  SSLCertificate:
-    Description: Arn of the SSL Certificate used on the internet facing ALB
-    Type: String
 
 Resources:
   # Load Balancer Configuration
@@ -50,7 +47,7 @@ Resources:
       Protocol: HTTPS
       SslPolicy: "ELBSecurityPolicy-2016-08"
       Certificates:
-        - CertificateArn: !Ref SSLCertificate
+        - CertificateArn: "arn:aws:acm:eu-west-1:460622670287:certificate/b5197fa2-a585-4e0c-9e01-9881a022925d"
 
   ALBTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
