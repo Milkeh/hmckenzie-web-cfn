@@ -12,6 +12,7 @@ Parameters:
     Type: String
 
 Resources:
+  # Load Balancer Configuration
   ApplicationLoadBalancer:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:
@@ -33,7 +34,7 @@ Resources:
     Properties:
       LoadBalancerArn: !Ref ApplicationLoadBalancer
       DefaultActions:
-        - Type: "forward"
+        - Type: forward
           TargetGroupArn: !Ref ALBTargetGroup
       Port: 80
       Protocol: HTTP
@@ -61,3 +62,29 @@ Resources:
       VpcId: 
         Fn::ImportValue:
           !Sub ${NetworkStackName}-VPC
+
+  # EC2 and Auto Scaling Group
+  AutoScalingGroup:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      AutoScalingGroupName: Web-ASG
+      LaunchConfigurationName: !Ref LaunchConfiguration
+      MaxSize: "1"
+      MinSize: "1"
+      DesiredCapacity: "1"
+      VPCZoneIdentifier:
+        - VPC-PublicSubnetA
+        - VPC-PublicSubnetB
+        - VPC-PublicSubnetC
+
+  LaunchConfiguration:
+    Type: AWS::AutoScaling::LaunchConfiguration
+    Properties:
+      AssociatePublicIpAddress: true
+      LaunchConfigurationName: Web-LaunchConfiguration
+      ImageId: ami-04c2a5c7e6c051fb2
+      InstanceType: t4g.micro
+      KeyName: hmckenzie-ireland
+      SecurityGroups:
+        - Fn::ImportValue:
+            SG-EC2ELBAccess
