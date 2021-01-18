@@ -81,7 +81,7 @@ Resources:
     Type: AWS::AutoScaling::LaunchConfiguration
     Properties:
       AssociatePublicIpAddress: true
-      LaunchConfigurationName: Web-LaunchConfiguration
+      LaunchConfigurationName: Web-LaunchConfigurationv2
       ImageId: ami-04c2a5c7e6c051fb2
       InstanceType: t4g.micro
       KeyName: hmckenzie-ireland
