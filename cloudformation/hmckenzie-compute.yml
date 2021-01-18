@@ -88,3 +88,5 @@ Resources:
       SecurityGroups:
         - Fn::ImportValue:
             SG-EC2ELBAccess
+        - Fn::ImportValue:
+            SG-SSHAccess
