@@ -70,9 +70,12 @@ Resources:
       MinSize: "1"
       DesiredCapacity: "1"
       VPCZoneIdentifier:
-        - VPC-PublicSubnetA
-        - VPC-PublicSubnetB
-        - VPC-PublicSubnetC
+      - Fn::ImportValue:
+          VPC-PublicSubnetA
+      - Fn::ImportValue:
+          VPC-PublicSubnetB
+      - Fn::ImportValue:
+          VPC-PublicSubnetC
 
   LaunchConfiguration:
     Type: AWS::AutoScaling::LaunchConfiguration
