@@ -113,3 +113,10 @@ Outputs:
         ApplicationLoadBalancer.DNSName
     Export:
       Name: ALB-DNSName
+  ApplicationLoadBalancerHostedZone:
+    Description: Hosted Zone for the Load Balancer
+    Value:
+      Fn::GetAtt:
+        ApplicationLoadBalancer.CanonicalHostedZoneID
+    Export:
+      Name: ALB-HostedZone
