@@ -98,4 +98,7 @@ Resources:
               - "#!/bin/bash -ex"
               - "\n"
               - "yum -y install httpd"
-              - "service httpd restart"
+              - "\n"
+              - "systemctl start httpd"
+              - "\n"
+              - "systemctl enable httpd"
