@@ -69,7 +69,9 @@ Resources:
       MaxSize: "1"
       MinSize: "1"
       DesiredCapacity: "1"
-      VPCZoneIdentifier:
+      TargetGroupARNs: 
+      - !Ref ALBTargetGroup
+			VPCZoneIdentifier:
       - Fn::ImportValue:
           VPC-PublicSubnetA
       - Fn::ImportValue:
