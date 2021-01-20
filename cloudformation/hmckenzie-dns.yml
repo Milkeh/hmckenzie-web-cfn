@@ -1,0 +1,29 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  CloudFormation template for hmckenzie.net DNS
+
+Parameters:
+  HostedZoneID:
+    Description: Existing Hosted Zone ID
+    Type: String
+    Default: Z066258939QW8BCDHXCJI
+
+  HostName:
+    Description: Hostname used for the frontend
+    Type: String
+    Default: dev.hmckenzie.net
+
+Resources:
+  DNSRecord:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      AliasTarget:
+        DNSName: 
+          Fn::ImportValue:
+            ALB-DNSName
+        HostedZoneId:
+          Fn::ImportValue:
+            ALB-HostedZone
+      HostedZoneId: !Sub ${HostedZoneID}
+      Name: !Sub ${HostName}
+      Type: A
