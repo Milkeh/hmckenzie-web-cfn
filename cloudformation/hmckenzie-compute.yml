@@ -98,3 +98,4 @@ Resources:
               - "#!/bin/bash -ex"
               - "\n"
               - "yum -y install httpd"
+              - "service httpd restart"
