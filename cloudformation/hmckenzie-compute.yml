@@ -104,3 +104,12 @@ Resources:
               - "systemctl start httpd"
               - "\n"
               - "systemctl enable httpd"
+
+Outputs:
+  ApplicationLoadBalancerDNS:
+    Description: DNS name for the Load Balancer
+    Value:
+      Fn::GetAtt:
+        ApplicationLoadBalancer.DNSName
+    Export:
+      Name: ALB-DNSName
