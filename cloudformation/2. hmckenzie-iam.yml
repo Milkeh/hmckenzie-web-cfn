@@ -2,5 +2,43 @@ AWSTemplateFormatVersion: 2010-09-09
 Description: >-
   CloudFormation template for configuring IAM resources
 
+Parameters:
+  Bucket:
+    Description: Resource arn of the S3 Bucket containing media
+    Type: String
+    Default: arn:aws:s3:::hmckenzie-web
+
 Resources:
+  WebServiceRole:
+    RoleName: WebServiceRole
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument: 
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: [ec2.amazonaws.com]
+            Action: 'sts:AssumeRole'
+      Path: /
   
+  WebBucketAccessPolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: WebS3BucketPolicy
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - 's3:GetObject'
+              - 's3:GetObjectVersion'
+            Resource: !Sub ${Bucket}
+      Roles: 
+        - !Ref WebServiceRole
+  
+  WebInstanceProfile:
+    InstanceProfileName: WebInstanceProfile
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles: 
+        - !Ref WebServiceRole
