@@ -16,7 +16,7 @@ Parameters:
     Type: String
     Default: ami-04c2a5c7e6c051fb2
   KeyName:
-    Description: The keyname of an existing KeyPair in this region
+    Description: The KeyPair of an existing KeyPair in this region
     Type: String
     Default: hmckenzie-ireland
 
@@ -101,7 +101,7 @@ Resources:
       LaunchConfigurationName: Web-LaunchConfigurationv2
       ImageId: !Sub ${AMI}
       InstanceType: t4g.micro
-      KeyName: ${KeyName}
+      KeyName: !Sub ${KeyName}
       SecurityGroups:
         - Fn::ImportValue:
             SG-EC2ELBAccess
