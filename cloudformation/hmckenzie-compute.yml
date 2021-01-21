@@ -11,6 +11,14 @@ Parameters:
     Description: ARN of the ACM Certificate to be used on the Load Balancer
     Type: String
     Default: arn:aws:acm:eu-west-1:460622670287:certificate/b5197fa2-a585-4e0c-9e01-9881a022925d
+  AMI:
+    Description: The AMI of the AMI to use for the Auto Scaling Group
+    Type: String
+    Default: ami-04c2a5c7e6c051fb2
+  KeyName:
+    Description: The keyname of an existing KeyPair in this region
+    Type: String
+    Default: hmckenzie-ireland
 
 Resources:
   # Load Balancer Configuration
@@ -91,9 +99,9 @@ Resources:
     Properties:
       AssociatePublicIpAddress: true
       LaunchConfigurationName: Web-LaunchConfigurationv2
-      ImageId: ami-04c2a5c7e6c051fb2
+      ImageId: !Sub ${AMI}
       InstanceType: t4g.micro
-      KeyName: hmckenzie-ireland
+      KeyName: ${KeyName}
       SecurityGroups:
         - Fn::ImportValue:
             SG-EC2ELBAccess
