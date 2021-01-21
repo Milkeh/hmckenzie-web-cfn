@@ -10,9 +10,9 @@ Parameters:
 
 Resources:
   WebServiceRole:
-    RoleName: WebServiceRole
     Type: AWS::IAM::Role
     Properties:
+      RoleName: WebServiceRole
       AssumeRolePolicyDocument: 
         Statement:
           - Effect: Allow
@@ -37,8 +37,8 @@ Resources:
         - !Ref WebServiceRole
   
   WebInstanceProfile:
-    InstanceProfileName: WebInstanceProfile
     Type: AWS::IAM::InstanceProfile
     Properties:
+      InstanceProfileName: WebInstanceProfile
       Roles: 
         - !Ref WebServiceRole
