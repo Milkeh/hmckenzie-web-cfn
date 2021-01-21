@@ -7,6 +7,10 @@ Parameters:
     Description: Name of the CloudFormation network stack
     Type: String
     Default: hmckenzie-network
+  CertificateARN:
+    Description: ARN of the ACM Certificate to be used on the Load Balancer
+    Type: String
+    Default: arn:aws:acm:eu-west-1:460622670287:certificate/b5197fa2-a585-4e0c-9e01-9881a022925d
 
 Resources:
   # Load Balancer Configuration
@@ -50,7 +54,7 @@ Resources:
       Protocol: HTTPS
       SslPolicy: "ELBSecurityPolicy-2016-08"
       Certificates:
-        - CertificateArn: "arn:aws:acm:eu-west-1:460622670287:certificate/b5197fa2-a585-4e0c-9e01-9881a022925d"
+        - CertificateArn: !Sub ${CertificateARN}
 
   ALBTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
