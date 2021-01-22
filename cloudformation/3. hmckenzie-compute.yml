@@ -122,6 +122,11 @@ Resources:
               - "systemctl start httpd"
               - "\n"
               - "systemctl enable httpd"
+              - "\n"
+              - "aws s3 cp s3://hmckenzie-web/web.tar.gz /tmp"
+              - "\n"
+              - "tar -xf /tmp/web.tar.gz /var/www/html/"
+              - "\n"
 
 Outputs:
   ApplicationLoadBalancerDNS:
