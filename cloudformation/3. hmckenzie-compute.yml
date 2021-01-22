@@ -99,6 +99,9 @@ Resources:
     Properties:
       AssociatePublicIpAddress: true
       LaunchConfigurationName: Web-LaunchConfigurationv2
+      IamInstanceProfile:
+        Fn::ImportValue:
+          IAM-InstanceProfile
       ImageId: !Sub ${AMI}
       InstanceType: t4g.micro
       KeyName: !Sub ${KeyName}
