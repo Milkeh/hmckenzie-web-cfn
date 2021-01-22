@@ -42,3 +42,10 @@ Resources:
       InstanceProfileName: WebInstanceProfile
       Roles: 
         - !Ref WebServiceRole
+
+Outputs:
+  IAMInstanceProfile:
+    Description: IAM Instance Profile for Web S3 Bucket Access
+    Value: WebInstanceProfile
+    Export:
+      Name: IAM-InstanceProfile
