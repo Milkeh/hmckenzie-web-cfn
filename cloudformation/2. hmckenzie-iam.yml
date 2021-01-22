@@ -46,6 +46,8 @@ Resources:
 Outputs:
   IAMInstanceProfile:
     Description: IAM Instance Profile for Web S3 Bucket Access
-    Value: !Ref WebInstanceProfile
+    Value:
+      Fn::GetAtt:
+        WebInstanceProfile.Arn
     Export:
       Name: IAM-InstanceProfile
