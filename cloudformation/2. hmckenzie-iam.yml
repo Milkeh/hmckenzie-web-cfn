@@ -6,7 +6,7 @@ Parameters:
   Bucket:
     Description: Resource arn of the S3 Bucket containing media
     Type: String
-    Default: arn:aws:s3:::hmckenzie-web
+    Default: arn:aws:s3:::hmckenzie-web/*
 
 Resources:
   WebServiceRole:
