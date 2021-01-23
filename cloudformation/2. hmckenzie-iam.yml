@@ -11,7 +11,7 @@ Parameters:
   CodePipelineAccessPolicy:
     Description: Arn of an existing CodeDeploy IAM policy (defaults to AWS managed policy)
     Type: String
-    Default: arn:aws:iam::460622670287:role/CodeDeployRole
+    Default: arn:aws:iam::aws:policy/service-role/AWSCodeDeployRole
 
 Resources:
   # Web Server Role Configuration
