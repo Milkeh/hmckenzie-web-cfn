@@ -125,7 +125,7 @@ Resources:
               - "\n"
               - "aws s3 cp s3://hmckenzie-web/web.tar.gz /tmp"
               - "\n"
-              - "tar -xf /tmp/web.tar.gz /var/www/html/"
+              - "tar -xf /tmp/web.tar.gz -C /var/www/html/"
               - "\n"
 
 Outputs:
@@ -143,3 +143,8 @@ Outputs:
         ApplicationLoadBalancer.CanonicalHostedZoneID
     Export:
       Name: ALB-HostedZone
+  AutoScalingGroup:
+    Description: Web App Auto Scaling Group
+    Value: !Ref AutoScalingGroup
+    Export:
+      Name: ASG-WebASG
