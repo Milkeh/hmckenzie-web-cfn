@@ -98,7 +98,7 @@ Resources:
     Type: AWS::AutoScaling::LaunchConfiguration
     Properties:
       AssociatePublicIpAddress: true
-      LaunchConfigurationName: Web-LaunchConfiguration
+      LaunchConfigurationName: Web-LaunchConfigurationv2
       IamInstanceProfile:
         Fn::ImportValue:
           IAM-InstanceProfile
@@ -115,18 +115,16 @@ Resources:
           Fn::Join:
             - ""
             -
-              - "#!/bin/bash -ex"
-              - "\n"
-              - "yum -y install httpd"
-              - "\n"
-              - "systemctl start httpd"
-              - "\n"
-              - "systemctl enable httpd"
-              - "\n"
-              - "aws s3 cp s3://hmckenzie-web/web.tar.gz /tmp"
-              - "\n"
-              - "tar -xf /tmp/web.tar.gz -C /var/www/html/"
-              - "\n"
+              - "#!/bin/bash -ex\n"
+              - "yum update -y\n"
+              - "yum install -y ruby wget\n"
+              - "cd /home/ec2-user;wget https://aws-codedeploy-" 
+              - !Ref "AWS::Region" 
+              - ".s3."
+              - !Ref "AWS::Region"
+              - ".amazonaws.com/latest/install\n"
+              - "chmod +x ./install\n"
+              - "./install auto\n"
 
 Outputs:
   ApplicationLoadBalancerDNS:
