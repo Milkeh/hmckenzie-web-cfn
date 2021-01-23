@@ -8,7 +8,13 @@ Parameters:
     Type: String
     Default: arn:aws:s3:::hmckenzie-web/*
 
+  CodePipelineAccessPolicy:
+    Description: Arn of an existing CodeDeploy IAM policy (defaults to AWS managed policy)
+    Type: String
+    Default: arn:aws:iam::460622670287:role/CodeDeployRole
+
 Resources:
+  # Web Server Role Configuration
   WebServiceRole:
     Type: AWS::IAM::Role
     Properties:
@@ -42,6 +48,20 @@ Resources:
       InstanceProfileName: WebInstanceProfile
       Roles: 
         - !Ref WebServiceRole
+  
+  #CodeDeploy Configuration
+  CodeDeployRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal: 
+              Service: [codedeploy.amazonaws.com]
+            Action: 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - !Sub ${CodePipelineAccessPolicy}
+      Path: /
 
 Outputs:
   IAMInstanceProfile:
