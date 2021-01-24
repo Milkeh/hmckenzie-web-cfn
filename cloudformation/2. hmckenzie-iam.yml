@@ -8,11 +8,6 @@ Parameters:
     Type: String
     Default: arn:aws:s3:::hmckenzie-web/*
 
-  CodePipelineAccessPolicy:
-    Description: Arn of an existing CodeDeploy IAM policy (defaults to AWS managed policy)
-    Type: String
-    Default: arn:aws:iam::aws:policy/service-role/AWSCodeDeployRole
-
 Resources:
   # Web Server Role Configuration
   WebServiceRole:
@@ -40,22 +35,6 @@ Resources:
               - 's3:List*'
             Resource: 
               - !Sub ${Bucket}
-              - "arn:aws:s3:::aws-codedeploy-us-east-2/*"
-              - "arn:aws:s3:::aws-codedeploy-us-east-1/*"
-              - "arn:aws:s3:::aws-codedeploy-us-west-1/*"
-              - "arn:aws:s3:::aws-codedeploy-us-west-2/*"
-              - "arn:aws:s3:::aws-codedeploy-ca-central-1/*"
-              - "arn:aws:s3:::aws-codedeploy-eu-west-1/*"
-              - "arn:aws:s3:::aws-codedeploy-eu-west-2/*"
-              - "arn:aws:s3:::aws-codedeploy-eu-west-3/*"
-              - "arn:aws:s3:::aws-codedeploy-eu-central-1/*"
-              - "arn:aws:s3:::aws-codedeploy-ap-east-1/*"
-              - "arn:aws:s3:::aws-codedeploy-ap-northeast-1/*"
-              - "arn:aws:s3:::aws-codedeploy-ap-northeast-2/*"
-              - "arn:aws:s3:::aws-codedeploy-ap-southeast-1/*"   
-              - "arn:aws:s3:::aws-codedeploy-ap-southeast-2/*"
-              - "arn:aws:s3:::aws-codedeploy-ap-south-1/*"
-              - "arn:aws:s3:::aws-codedeploy-sa-east-1/*"
       Roles: 
         - !Ref WebServiceRole
   
@@ -65,21 +44,6 @@ Resources:
       InstanceProfileName: WebInstanceProfile
       Roles: 
         - !Ref WebServiceRole
-  
-  #CodeDeploy Configuration
-  CodeDeployRole:
-    Type: AWS::IAM::Role
-    Properties:
-      RoleName: CodeDeployRole
-      AssumeRolePolicyDocument:
-        Statement:
-          - Effect: Allow
-            Principal: 
-              Service: [codedeploy.amazonaws.com]
-            Action: 'sts:AssumeRole'
-      ManagedPolicyArns:
-        - !Sub ${CodePipelineAccessPolicy}
-      Path: /
 
 Outputs:
   InstanceProfile:
@@ -89,11 +53,3 @@ Outputs:
         WebInstanceProfile.Arn
     Export:
       Name: IAM-InstanceProfile
-
-  CodeDeployRole:
-    Description: IAM Role used for the CodeDeploy service
-    Value:
-      Fn::GetAtt:
-        CodeDeployRole.Arn
-    Export:
-      Name: IAM-CodeDeployRole
