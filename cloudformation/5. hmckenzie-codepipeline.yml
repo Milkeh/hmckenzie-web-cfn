@@ -28,14 +28,6 @@ Resources:
       AutoScalingGroups: 
         - Fn::ImportValue:
             ASG-WebASG
-      Deployment:
-        Description: Web server deployment
-        Revision:
-          RevisionType: S3
-          S3Location:
-            Bucket: !Sub ${S3Bucket}
-            Key: !Sub ${DeploymentFile}
-            BundleType: Zip
       DeploymentGroupName: Web-ASG
       ServiceRoleArn:
         Fn::ImportValue:
