@@ -127,7 +127,7 @@ Resources:
         Statement:
           - Effect: Allow
             Principal: 
-              Service: [codedeploy.amazonaws.com]
+              Service: [codepipeline.amazonaws.com]
             Action: 'sts:AssumeRole'
       Path: /
   
