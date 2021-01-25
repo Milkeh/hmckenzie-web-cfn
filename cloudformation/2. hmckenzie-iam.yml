@@ -277,3 +277,17 @@ Outputs:
         CodeDeployRole.Arn
     Export:
       Name: IAM-CodeDeployRole
+
+  CodePipelineRole:
+    Description: IAM Role used for the CodePipeline service
+    Value:
+      Fn::GetAtt:
+        CodePipelineRole.Arn
+    Export:
+      Name: IAM-CodePipelineRole
+
+  CodePipelineBucket:
+    Description: S3 bucket storing deployment artifacts
+    Value: !Sub ${CodePipelineBucket}
+    Export:
+      Name: S3-CodePipelineBucket
