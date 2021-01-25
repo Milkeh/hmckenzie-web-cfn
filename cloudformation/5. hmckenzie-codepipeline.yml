@@ -47,7 +47,9 @@ Resources:
                 DeploymentGroupName: !Ref DeploymentGroup
       ArtifactStore:
         Type: S3  
-        Location: "codepipeline-eu-west-1-259369533692"
+        Location: 
+          Fn::ImportValue:
+            S3-CodePipelineBucket
   
   Application:
     Type: AWS::CodeDeploy::Application
