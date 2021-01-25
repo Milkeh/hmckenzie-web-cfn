@@ -11,7 +11,7 @@ Parameters:
   CodePipelineBucket:
     Description: Arn of the CodePipeline artifacts bucket 
     Type: String
-    Default: arn:aws:s3:::hmckenzie-web/*
+    Default: arn:aws:s3:::codepipeline-eu-west-1-259369533692/*
 
   CodePipelineAccessPolicy:
     Description: Arn of an existing CodeDeploy IAM policy (defaults to AWS managed policy)
