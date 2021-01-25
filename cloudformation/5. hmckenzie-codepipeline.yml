@@ -49,7 +49,7 @@ Resources:
         Type: S3  
         Location: 
           Fn::ImportValue:
-            S3-ArtifactStore
+            S3-CodePipelineBucket
   
   Application:
     Type: AWS::CodeDeploy::Application
