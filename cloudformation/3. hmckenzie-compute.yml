@@ -115,6 +115,7 @@ Resources:
         - Fn::ImportValue:
             SG-SSHAccess
       UserData:
+        # Install the CodeDeploy agent
         Fn::Base64:
           Fn::Join:
             - ""

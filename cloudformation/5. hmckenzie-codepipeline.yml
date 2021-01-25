@@ -3,23 +3,59 @@ Description: >-
   CloudFormation template provisioning CodePipeline
 
 Parameters:
-  S3Bucket:
-    Description: S3 Bucket containing deployment content
+  ConnectionArn:
+    Description: The arn of the connection used to connect to GitHub
     Type: String
-    Default: hmckenzie-web
-
-  DeploymentFile:
-    Description: Filename of the deployment
-    Type: String
-    Default: SampleApp_Linux.zip
+    Default: "arn:aws:codestar-connections:eu-west-1:460622670287:connection/77ee20fc-a08e-4054-bd4d-e8cab27a299a"
 
 Resources:
+  Pipeline:
+    Type: AWS::CodePipeline::Pipeline
+    Properties:
+      Name: WebPipeline
+      RoleArn:
+        Fn::ImportValue:
+          IAM-CodePipelineRole
+      Stages:
+        - Name: Source
+          Actions:
+            - Name: SourceGitHub
+              ActionTypeId:
+                Category: Source
+                Owner: AWS
+                Provider: CodeStarSourceConnection
+                Version: "1"
+              Configuration:
+                ConnectionArn: !Sub ${ConnectionArn}
+                FullRepositoryId: "Milkeh/hmckenzie-web"
+                BranchName: "main"
+                OutputArtifactFormat: "CODE_ZIP"
+              OutputArtifacts:
+                - Name: SourceArtifact
+        - Name: Deploy
+          Actions:
+            - Name: DeployToWeb
+              ActionTypeId:
+                Category: Deploy
+                Owner: AWS
+                Provider: CodeDeploy
+                Version: "1"
+              InputArtifacts:
+                - Name: SourceArtifact
+              Configuration:
+                ApplicationName: !Ref Application
+                DeploymentGroupName: !Ref DeploymentGroup
+      ArtifactStore:
+        Type: S3  
+        Location: 
+          Fn::ImportValue:
+            S3-ArtifactStore
+  
   Application:
     Type: AWS::CodeDeploy::Application
     Properties:
       ApplicationName: WebApp
       ComputePlatform: Server
-
   
   DeploymentGroup:
     Type: AWS::CodeDeploy::DeploymentGroup
