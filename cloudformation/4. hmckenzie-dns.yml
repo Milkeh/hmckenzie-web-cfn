@@ -11,7 +11,7 @@ Parameters:
   HostName:
     Description: Hostname used for the frontend
     Type: String
-    Default: dev.hmckenzie.net
+    Default: hmckenzie.net
 
 Resources:
   DNSRecord:
