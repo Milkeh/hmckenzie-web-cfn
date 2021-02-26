@@ -35,3 +35,6 @@ While there are customisable parameters, I have set the default and flexibility 
 
 #### Diagram
 ![hmckenzie-net-cfn-diagram](https://hmckenzie-public.s3-eu-west-1.amazonaws.com/media/hmckenzie-net-cfn-diagram.jpg)
+
+# Author
+[Harley McKenzie](https://hmckenzie.net) - Creator
