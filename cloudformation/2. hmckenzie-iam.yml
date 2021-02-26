@@ -3,13 +3,13 @@ Description: >-
   CloudFormation template for configuring IAM resources
 
 Parameters:
-  Bucket:
-    Description: Resource arn of the S3 Bucket containing media
+  WebBucket:
+    Description: Name of the S3 bucket containing web content
     Type: String
-    Default: arn:aws:s3:::hmckenzie-web/*
+    Default: hmckenzie-web
 
   CodePipelineBucket:
-    Description: Arn of the CodePipeline artifacts bucket 
+    Description: Name of the S3 bucket used to store CodePipeline artifacts 
     Type: String
     Default: codepipeline-eu-west-1-259369533692
 
@@ -44,7 +44,7 @@ Resources:
               - 's3:Get*'
               - 's3:List*'
             Resource: 
-              - !Sub ${Bucket}
+              - !Sub arn:aws:s3:::${WebBucket}/*
       Roles: 
         - !Ref WebServiceRole
   
